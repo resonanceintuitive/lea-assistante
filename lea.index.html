@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Léa · Assistante Résonance Intuitive</title>
+  <meta name="description" content="Léa, assistante virtuelle de Sandrine Padoly, répond aux questions sur les consultations, guides et outils Résonance Intuitive." />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+      --sand: #EAE1D2;
+      --sand-light: #F4EDE1;
+      --card: #FBF6EE;
+      --ink: #2E241D;
+      --ink-soft: #6B5D4F;
+      --rust: #A8482E;
+      --rust-deep: #8A3A24;
+      --plum: #5E4256;
+      --plum-soft: #E7DBE2;
+      --line: #DAD0BC;
+      --green: #7CBF8E;
+      --shadow: 0 22px 70px rgba(46,36,29,0.18);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top left, rgba(168,72,46,.14), transparent 32%),
+        radial-gradient(circle at bottom right, rgba(94,66,86,.16), transparent 34%),
+        var(--sand);
+      color: var(--ink);
+      font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 22px;
+    }
+
+    .page {
+      width: min(100%, 1040px);
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 26px;
+      align-items: center;
+    }
+
+    .intro-card {
+      background: rgba(251,246,238,.72);
+      border: 1px solid rgba(218,208,188,.9);
+      border-radius: 26px;
+      padding: 30px;
+      box-shadow: 0 12px 40px rgba(46,36,29,.08);
+      backdrop-filter: blur(8px);
+    }
+
+    .eyebrow {
+      color: var(--rust-deep);
+      font-weight: 700;
+      font-size: 13px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      margin: 0 0 14px;
+      font-family: 'Fraunces', serif;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: .95;
+      color: var(--ink);
+    }
+
+    .intro-card p {
+      margin: 0 0 14px;
+      color: var(--ink-soft);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .mini-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .mini-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      font-size: 14.5px;
+      color: var(--ink);
+    }
+
+    .mini-dot {
+      width: 8px;
+      height: 8px;
+      margin-top: 7px;
+      border-radius: 50%;
+      background: var(--rust);
+      flex: 0 0 auto;
+    }
+
+    #lea-root {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--sand);
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      height: 680px;
+      border: 1px solid rgba(218,208,188,.9);
+    }
+
+    .lea-header {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      padding: 18px 20px;
+      background: linear-gradient(135deg, var(--plum), var(--rust-deep));
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .lea-avatar {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: var(--card);
+      color: var(--rust-deep);
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 21px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .lea-pulse {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--green);
+      border: 2px solid var(--plum);
+      animation: lea-breathe 2.6s ease-in-out infinite;
+    }
+
+    @keyframes lea-breathe {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.35); opacity: .72; }
+    }
+
+    .lea-header-name {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1.15;
+    }
+
+    .lea-header-sub {
+      font-size: 12.5px;
+      opacity: .86;
+      margin-top: 2px;
+    }
+
+    .lea-disclosure {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      background: var(--plum-soft);
+      padding: 9px 20px;
+      border-bottom: 1px solid var(--line);
+      flex-shrink: 0;
+    }
+
+    .lea-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+
+    .lea-msg {
+      max-width: 86%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      font-size: 14.5px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .lea-msg.assistant {
+      background: var(--card);
+      border: 1px solid var(--line);
+      align-self: flex-start;
+      border-bottom-left-radius: 5px;
+    }
+
+    .lea-msg.user {
+      background: var(--rust);
+      color: #fff;
+      align-self: flex-end;
+      border-bottom-right-radius: 5px;
+    }
+
+    .lea-suggestions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 0 16px 12px;
+      flex-shrink: 0;
+    }
+
+    .lea-chip,
+    .lea-action {
+      font-family: 'Inter', sans-serif;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform .14s ease, background .14s ease, border-color .14s ease;
+    }
+
+    .lea-chip {
+      font-size: 12.5px;
+      padding: 7px 11px;
+      border: 1px solid var(--rust);
+      color: var(--rust-deep);
+      background: rgba(251,246,238,.45);
+    }
+
+    .lea-chip:hover,
+    .lea-action:hover {
+      transform: translateY(-1px);
+    }
+
+    .lea-ctas {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 13px;
+      flex-wrap: wrap;
+      border-top: 1px solid rgba(218,208,188,.65);
+      padding-top: 12px;
+      background: rgba(234,225,210,.85);
+    }
+
+    .lea-action {
+      text-decoration: none;
+      border: 1px solid var(--rust);
+      color: var(--rust-deep);
+      background: var(--card);
+      font-weight: 700;
+      font-size: 12.5px;
+      padding: 8px 12px;
+    }
+
+    .lea-action.primary {
+      background: var(--rust);
+      color: #fff;
+      border-color: var(--rust);
+    }
+
+    .lea-inputbar {
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px 16px;
+      border-top: 1px solid var(--line);
+      background: var(--sand);
+      flex-shrink: 0;
+    }
+
+    .lea-input {
+      flex: 1;
+      min-height: 44px;
+      max-height: 96px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14.5px;
+      color: var(--ink);
+      resize: none;
+      outline: none;
+    }
+
+    .lea-input:focus { border-color: var(--rust); }
+
+    .lea-send {
+      background: var(--rust);
+      color: #fff;
+      border: none;
+      border-radius: 14px;
+      padding: 0 18px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .lea-send:hover { background: var(--rust-deep); }
+
+    .lea-messages::-webkit-scrollbar { width: 5px; }
+    .lea-messages::-webkit-scrollbar-thumb { background: var(--line); border-radius: 3px; }
+
+    @media (max-width: 900px) {
+      body { align-items: flex-start; padding: 14px; }
+      .page { grid-template-columns: 1fr; gap: 16px; }
+      .intro-card { padding: 22px; }
+      #lea-root { height: 680px; max-width: 100%; }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 0; background: var(--sand); }
+      .page { display: block; width: 100%; }
+      .intro-card { display: none; }
+      #lea-root { height: 100vh; border-radius: 0; border: none; max-width: none; box-shadow: none; }
+      .lea-msg { max-width: 90%; }
+      .lea-send { padding: 0 14px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="intro-card">
+      <div class="eyebrow">Résonance Intuitive</div>
+      <h1>Une question avant de réserver ?</h1>
+      <p>Léa répond aux questions simples sur les consultations, les guides et les outils de Sandrine.</p>
+      <p>Elle n'est pas Sandrine. Elle ne remplace pas un avis médical. Elle t'aide juste à comprendre quelle porte pousser sans tourner trois heures autour du pot.</p>
+      <div class="mini-list">
+        <div class="mini-item"><span class="mini-dot"></span><span>Consultation : lecture corporelle, émotionnelle et transgénérationnelle.</span></div>
+        <div class="mini-item"><span class="mini-dot"></span><span>Guides : douleurs, culpabilité, attachement, famille, reconstruction.</span></div>
+        <div class="mini-item"><span class="mini-dot"></span><span>Outils : Repère, RED FLAG, applications et ressources pratiques.</span></div>
+      </div>
+    </section>
+
+    <section id="lea-root" aria-label="Assistante virtuelle Léa"></section>
+  </main>
+
+  <script>
+    (function () {
+      var CONFIG = {
+        name: "Léa",
+        brand: "Résonance Intuitive",
+        sandrine: "Sandrine Padoly",
+        tiktok: "https://www.tiktok.com/@sandrine.padoly",
+        instagram: "https://www.instagram.com/sandrine.padoly/",
+        consultationUrl: "https://buy.stripe.com/3cI00i5Mo6I49DX3Iv9bO2u",
+        payhipUrl: "https://payhip.com/lesvoixducorps",
+        repereUrl: "https://repere-app.netlify.app/",
+        intro: "Bonjour, je suis Léa, l'assistante virtuelle de Sandrine. Je peux t'aider à comprendre ses consultations, ses guides et ses outils. Je ne suis pas Sandrine en personne, et je ne remplace jamais un avis médical. Mais je peux déjà t'orienter clairement.",
+        fallback: "Je n'ai pas encore cette réponse en mémoire. Le plus simple est d'écrire directement à Sandrine en message privé, parce que je préfère ne pas inventer une réponse au hasard. Les humains le font très bien sans moi."
+      };
+
+      var KNOWLEDGE = [
+        {
+          id: "consultation",
+          label: "Consultation",
+          triggers: ["consultation", "séance", "seance", "rdv", "rendez", "réserver", "reserver", "visio", "cabinet", "lecture corporelle", "lecture emotionnelle", "lecture émotionnelle"],
+          answer: "Une consultation avec Sandrine sert à écouter ce que ton corps raconte : douleur, tension, répétition familiale, émotion qui revient, rôle que tu portes depuis trop longtemps. Ce n'est pas de la voyance. Ce n'est pas un diagnostic médical. C'est une lecture corporelle et émotionnelle pour remettre du sens là où le corps crie depuis un moment.\n\nLe tarif habituel est de 75 €. Tu peux réserver directement, ou écrire à Sandrine si tu as besoin de vérifier que c'est adapté à ta situation.",
+          chips: ["Combien coûte une consultation ?", "Comment se passe une séance ?", "Je veux réserver"]
+        },
+        {
+          id: "prix",
+          label: "Tarifs",
+          triggers: ["prix", "tarif", "combien", "coûte", "coute", "payer", "paiement", "cher"],
+          answer: "La consultation individuelle est à 75 €. Sandrine propose aussi des guides et outils numériques à prix plus accessibles, selon ce que tu veux travailler : douleur, culpabilité, attachement, famille, sécurité, red flags.\n\nSi tu hésites entre consultation et guide, la vraie question est simple : est-ce que tu veux comprendre seule avec un support, ou être accompagnée directement sur ton cas ?",
+          chips: ["Je veux un guide", "Je veux une consultation", "Quelle option choisir ?"]
+        },
+        {
+          id: "reservation",
+          label: "Réservation",
+          triggers: ["réserver", "reserver", "prendre rendez-vous", "prendre rdv", "prendre un rdv", "payer", "stripe", "lien"],
+          answer: "Pour réserver, tu peux passer par le lien de paiement sécurisé. Après le paiement, Sandrine te recontacte pour organiser le rendez-vous.\n\nSi ta situation est particulière ou si tu veux vérifier avant, écris-lui en message privé sur TikTok ou Instagram. Ça évite de réserver au mauvais endroit, sport national des humains pressés.",
+          chips: ["Lien de réservation", "TikTok de Sandrine", "Instagram de Sandrine"]
+        },
+        {
+          id: "guides",
+          label: "Guides",
+          triggers: ["guide", "pdf", "livre", "ebook", "audio", "vidéo", "video", "payhip", "boutique"],
+          answer: "Les guides de Sandrine sont faits pour comprendre ce qui se rejoue dans le corps, dans les émotions ou dans les relations. Ils sont utiles si tu veux avancer seule, à ton rythme, sans forcément prendre une consultation tout de suite.\n\nTu peux retrouver les guides sur sa boutique Payhip. Les thèmes peuvent concerner les douleurs, la culpabilité, l'attachement, les liens familiaux, la sciatique, les cervicales ou les épaules.",
+          chips: ["Voir les guides", "Quel guide choisir ?", "J'ai une douleur"]
+        },
+        {
+          id: "douleur",
+          label: "Douleurs",
+          triggers: ["douleur", "mal", "sciatique", "cervicale", "cervicales", "épaule", "epaule", "genou", "dos", "ventre", "jambes", "tension", "migraine", "nuque"],
+          answer: "Quand tu parles d'une douleur, Sandrine ne cherche pas à remplacer le médecin. Elle regarde ce que cette douleur peut raconter dans ton histoire : charge mentale, rôle familial, colère retenue, loyauté, peur de décevoir, fatigue ancienne.\n\nSi la douleur est forte, récente, inhabituelle ou inquiétante, il faut d'abord un avis médical. Ensuite, une consultation ou un guide peut aider à travailler la part émotionnelle et corporelle qui reste coincée.",
+          chips: ["Douleur cervicale", "Sciatique", "Épaule", "Je veux réserver"]
+        },
+        {
+          id: "culpabilite",
+          label: "Culpabilité / dire non",
+          triggers: ["culpabilité", "culpabilite", "dire non", "limite", "limites", "m'imposer", "m imposer", "oser", "peur de décevoir", "peur de decevoir", "famille"],
+          answer: "La culpabilité n'est pas toujours un signe que tu fais mal. Souvent, c'est juste le vieux système intérieur qui panique quand tu commences enfin à te choisir. Charmant mécanisme, vraiment.\n\nPour ce thème, un guide peut déjà t'aider à comprendre pourquoi dire non te secoue autant. Si c'est très enraciné dans la famille ou dans le corps, une consultation sera plus adaptée.",
+          chips: ["Voir les guides", "Famille", "Consultation"]
+        },
+        {
+          id: "attachement",
+          label: "Attachement / oublier quelqu'un",
+          triggers: ["oublier", "relation", "rupture", "toxique", "amour", "attachement", "obsession", "manque", "cendra", "revenir", "personne"],
+          answer: "Quand quelqu'un reste dans la tête, ce n'est pas forcément de l'amour. Parfois c'est un manque, une blessure, une attente ancienne, ou une partie de toi qui cherche encore une réparation.\n\nLe guide sur le fait de ne pas réussir à l'oublier peut être un bon point d'entrée. Si l'histoire te prend trop de place ou touche ton corps, la consultation permet d'aller plus précisément dans ton cas.",
+          chips: ["Voir le guide", "Je veux comprendre", "Consultation"]
+        },
+        {
+          id: "repere",
+          label: "Repère",
+          triggers: ["repère", "repere", "urgence", "sécurité", "securite", "danger", "agression", "application", "appli", "femme", "protection"],
+          answer: "Repère est un outil pensé pour préparer les informations utiles avant une situation d'urgence : contacts, éléments importants, repères personnels. Le principe est simple : le pire moment pour chercher quoi faire, c'est quand tu en as besoin. Le cerveau humain aime improviser en crise, ce qui est une idée catastrophique assez constante.\n\nL'outil aide surtout à anticiper, organiser et transmettre plus vite ce qui compte.",
+          chips: ["Découvrir Repère", "Comment ça marche ?", "Pour qui ?"]
+        },
+        {
+          id: "redflag",
+          label: "RED FLAG",
+          triggers: ["red flag", "redflag", "test", "profil", "famille toxique", "relation toxique", "emprise", "manipulation", "alerte", "toxique"],
+          answer: "RED FLAG aide à repérer des dynamiques qui abîment : emprise, culpabilisation, confusion, rôle familial, relations qui te vident. L'idée n'est pas de coller une étiquette sur les gens. L'idée est de te rendre de la clarté.\n\nC'est utile si tu sens que quelque chose ne va pas, mais que tu n'arrives plus à savoir si tu exagères ou si tu t'adaptes trop.",
+          chips: ["Famille", "Relation toxique", "Voir les outils"]
+        },
+        {
+          id: "medical",
+          label: "Alerte santé",
+          triggers: ["urgence médicale", "suicide", "mourir", "sang", "paralysie", "malaise", "douleur poitrine", "respire plus", "respirer", "grave", "hôpital", "hopital"],
+          answer: "Là, je ne vais pas jouer à l'assistante inspirée. Si tu décris une douleur intense, un malaise, une paralysie, une douleur dans la poitrine, une détresse psychologique forte ou une urgence, il faut contacter un professionnel de santé, le 15, le 112, ou les urgences selon ta situation.\n\nLe travail de Sandrine peut accompagner un vécu émotionnel ou corporel, mais il ne remplace jamais une prise en charge médicale quand il y a un risque.",
+          chips: ["Consultation", "Douleur", "Écrire à Sandrine"]
+        },
+        {
+          id: "choisir",
+          label: "Choisir l'offre",
+          triggers: ["choisir", "quoi prendre", "quelle offre", "adapté", "adapte", "besoin", "conseil", "recommande", "recommandes"],
+          answer: "Si tu veux une réponse sur ton cas précis, prends la consultation. Si tu veux avancer seule sur un thème clair, prends un guide. Si tu veux préparer ta sécurité ou organiser des informations importantes, regarde Repère. Si tu veux comprendre une dynamique toxique ou familiale, regarde RED FLAG.\n\nLe plus rentable émotionnellement, c'est souvent de commencer par ce qui te soulage maintenant, pas par ce qui fait joli dans un panier.",
+          chips: ["Consultation", "Guides", "Repère", "RED FLAG"]
+        }
+      ];
+
+      var DEFAULT_CHIPS = [
+        "Comment se passe une consultation ?",
+        "Combien coûte une consultation ?",
+        "Quel guide choisir ?",
+        "J'ai une douleur",
+        "C'est quoi Repère ?",
+        "C'est quoi RED FLAG ?"
+      ];
+
+      var state = {
+        messages: loadHistory(),
+        chips: DEFAULT_CHIPS.slice()
+      };
+
+      if (!state.messages.length) {
+        state.messages.push({ role: "assistant", content: CONFIG.intro });
+      }
+
+      function normalize(text) {
+        return (text || "")
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-z0-9\s'-]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim();
+      }
+
+      function findBestAnswer(text) {
+        var clean = normalize(text);
+        var best = null;
+        var bestScore = 0;
+
+        KNOWLEDGE.forEach(function (item) {
+          var score = 0;
+          item.triggers.forEach(function (trigger) {
+            var t = normalize(trigger);
+            if (!t) return;
+            if (clean.indexOf(t) !== -1) score += t.length > 8 ? 3 : 2;
+            if (clean.split(" ").indexOf(t) !== -1) score += 1;
+          });
+          if (score > bestScore) {
+            best = item;
+            bestScore = score;
+          }
+        });
+
+        return bestScore ? best : null;
+      }
+
+      function enrichAnswer(item, userText) {
+        if (!item) return CONFIG.fallback;
+        return item.answer;
+      }
+
+      function sendMessage(text) {
+        if (!text.trim()) return;
+        state.messages.push({ role: "user", content: text.trim() });
+        render();
+
+        window.setTimeout(function () {
+          var item = findBestAnswer(text);
+          var answer = enrichAnswer(item, text);
+          state.messages.push({ role: "assistant", content: answer });
+          state.chips = item && item.chips ? item.chips : DEFAULT_CHIPS.slice();
+          saveHistory();
+          render();
+        }, 260);
+      }
+
+      function clearConversation() {
+        state.messages = [{ role: "assistant", content: CONFIG.intro }];
+        state.chips = DEFAULT_CHIPS.slice();
+        saveHistory();
+        render();
+      }
+
+      function saveHistory() {
+        try {
+          localStorage.setItem("lea_resonance_history_v1", JSON.stringify(state.messages.slice(-18)));
+        } catch (e) {}
+      }
+
+      function loadHistory() {
+        try {
+          return JSON.parse(localStorage.getItem("lea_resonance_history_v1")) || [];
+        } catch (e) {
+          return [];
+        }
+      }
+
+      function escapeHtml(str) {
+        return String(str).replace(/[&<>'"]/g, function (c) {
+          return { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[c];
+        });
+      }
+
+      function render() {
+        var root = document.getElementById("lea-root");
+        root.innerHTML =
+          '<div class="lea-header">' +
+            '<div class="lea-avatar">L<div class="lea-pulse"></div></div>' +
+            '<div>' +
+              '<div class="lea-header-name">' + CONFIG.name + '</div>' +
+              '<div class="lea-header-sub">Assistante · ' + CONFIG.brand + '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="lea-disclosure">Je suis un assistant virtuel. Je réponds aux questions simples et j’oriente vers Sandrine quand il faut du précis.</div>' +
+          '<div class="lea-messages" id="lea-messages"></div>' +
+          '<div class="lea-suggestions" id="lea-suggestions"></div>' +
+          '<div class="lea-ctas">' +
+            '<a class="lea-action primary" href="' + CONFIG.consultationUrl + '" target="_blank" rel="noopener">Réserver</a>' +
+            '<a class="lea-action" href="' + CONFIG.payhipUrl + '" target="_blank" rel="noopener">Guides</a>' +
+            '<a class="lea-action" href="' + CONFIG.repereUrl + '" target="_blank" rel="noopener">Repère</a>' +
+            '<a class="lea-action" href="' + CONFIG.tiktok + '" target="_blank" rel="noopener">TikTok</a>' +
+            '<button class="lea-action" type="button" id="lea-clear">Effacer</button>' +
+          '</div>' +
+          '<div class="lea-inputbar">' +
+            '<textarea class="lea-input" id="lea-input" rows="1" placeholder="Écris ta question..."></textarea>' +
+            '<button class="lea-send" id="lea-send">Envoyer</button>' +
+          '</div>';
+
+        var messagesEl = document.getElementById("lea-messages");
+        state.messages.forEach(function (message) {
+          var div = document.createElement("div");
+          div.className = "lea-msg " + message.role;
+          div.textContent = message.content;
+          messagesEl.appendChild(div);
+        });
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+
+        var chipsEl = document.getElementById("lea-suggestions");
+        state.chips.forEach(function (chip) {
+          var button = document.createElement("button");
+          button.className = "lea-chip";
+          button.type = "button";
+          button.textContent = chip;
+          button.addEventListener("click", function () { sendMessage(chip); });
+          chipsEl.appendChild(button);
+        });
+
+        var input = document.getElementById("lea-input");
+        var send = document.getElementById("lea-send");
+        var clear = document.getElementById("lea-clear");
+
+        send.addEventListener("click", function () {
+          sendMessage(input.value);
+        });
+
+        input.addEventListener("keydown", function (event) {
+          if (event.key === "Enter" && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage(input.value);
+          }
+        });
+
+        input.addEventListener("input", function () {
+          input.style.height = "auto";
+          input.style.height = Math.min(input.scrollHeight, 96) + "px";
+        });
+
+        clear.addEventListener("click", clearConversation);
+        input.focus();
+      }
+
+      render();
+    })();
+  </script>
+</body>
+</html>
